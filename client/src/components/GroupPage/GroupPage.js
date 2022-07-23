@@ -11,10 +11,12 @@ import MuteBtn from "./MuteBtn";
 import CaptureBtn from "./CaptureBtn";
 import { toast } from "react-toastify";
 import cameraAudioSrc from "./audio/camera.mp3"; // 카메라 셔터 음원
+// import Loading from "../Loading/Loading";
 
 let IMGS = [];
 
 function GroupPage() {
+  // const [loading, setLoading] = useState(true);
   let { roomname } = useParams();
   const navigate = useNavigate();
   const tabRefs = {
@@ -97,6 +99,7 @@ function GroupPage() {
 
   return (
     <div className="size_fix_box">
+      {/* <div>{loading ? <Loading /> : null}</div> */}
       <div className="container" style={takePhotoLayer}>
         <MyHeader subTitle="촬영중" onBackUrl="/main" />
         <div className="contents_container">

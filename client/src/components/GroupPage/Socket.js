@@ -3,9 +3,12 @@ import styles from "./GroupPage.module.css";
 import remove from "./remove.js";
 import remove2 from "./remove2.js";
 import io from "socket.io-client";
+import Loading from "../Loading/Loading";
+
 const token = localStorage.getItem("token");
 
 const VideoAREA = forwardRef((props, ref) => {
+  const [loading, setLoading] = useState(true);
   const SOCKET_SERVER_URL = "http://localhost:5001"; // ! : local
   // const SOCKET_SERVER_URL = "http://www.4cut.shop"; // ! : dev
   const DEFAULT_BACKGROUND =
@@ -33,6 +36,7 @@ const VideoAREA = forwardRef((props, ref) => {
         video: true,
         audio: true,
       });
+      setLoading(false);
       if (localVideoRef.current) localVideoRef.current.srcObject = stream;
       if (!(pcRef.current && socketRef.current)) return;
       stream.getTracks().forEach((track) => {
@@ -71,7 +75,9 @@ const VideoAREA = forwardRef((props, ref) => {
         offerToReceiveAudio: true,
         offerToReceiveVideo: true,
       });
+      setLoading(false);
       await pcRef.current.setLocalDescription(new RTCSessionDescription(sdp));
+      setLoading(false);
       socketRef.current.emit("offer", sdp);
     } catch (e) {
       console.error(e);
@@ -81,6 +87,7 @@ const VideoAREA = forwardRef((props, ref) => {
     if (!(pcRef.current && socketRef.current)) return;
     try {
       await pcRef.current.setRemoteDescription(new RTCSessionDescription(sdp));
+      setLoading(false);
       console.log("answer set remote description success");
       const mySdp = await pcRef.current.createAnswer({
         offerToReceiveVideo: true,
@@ -88,6 +95,7 @@ const VideoAREA = forwardRef((props, ref) => {
       });
       console.log("create answer");
       await pcRef.current.setLocalDescription(new RTCSessionDescription(mySdp));
+      setLoading(false);
       socketRef.current.emit("answer", mySdp);
     } catch (e) {
       console.error(e);
@@ -95,6 +103,7 @@ const VideoAREA = forwardRef((props, ref) => {
   };
 
   useEffect(() => {
+    setLoading(true);
     socketRef.current = io.connect(SOCKET_SERVER_URL);
     pcRef.current = new RTCPeerConnection(pc_config);
     socketRef.current.on("all_users", (allUsers) => {
@@ -127,6 +136,7 @@ const VideoAREA = forwardRef((props, ref) => {
     socketRef.current.on("backgroundChange", (img) => {
       props.setBgImg(img);
     });
+
     setVideoTracks();
     remove();
     remove2();
@@ -147,6 +157,7 @@ const VideoAREA = forwardRef((props, ref) => {
   }
   return (
     <>
+      <div>{loading ? <Loading /> : null}</div>
       <div
         className={styles.box}
         ref={captureAreaRef}
