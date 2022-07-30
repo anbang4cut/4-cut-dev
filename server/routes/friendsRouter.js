@@ -50,10 +50,17 @@ friendsRouter.patch("/delete/:friendId", async (req, res) => {
 
 // 친구 앨범 중 공개된 사진만 가져오기
 friendsRouter.get("/showAlbum/:frinedId", async (req, res) => {
-  const images = await Image.find({ _id: req.params.id, public: true }).sort({
-    createdAt: -1,
-  });
-  res.json(images);
+  try {
+    const images = await Image.find({ _id: req.params.id, public: true }).sort({
+      createdAt: -1,
+    });
+
+    // if (!images) throw new Error("존재하지 않는 ID입니다.");
+
+    res.json(images);
+  } catch (err) {
+    res.status(200).json({ err: err.message });
+  }
 });
 
 // 나의 친구 리스트

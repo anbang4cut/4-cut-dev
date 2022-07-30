@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import "react-toastify/dist/ReactToastify.css"; 
 
 /* Components */
 import GroupPage from "./components/GroupPage/GroupPage";
@@ -14,6 +14,7 @@ import PhotoEditPage from "./components/PhotoEditPage/PhotoEditPage";
 import RegisterPage from "./components/RegisterPage/RegisterPage";
 import UserMain from "./components/UserMain/UserMain";
 import AlbumPage from "./components/AlbumPage/AlbumPage"; // TEST
+import FriendPage from "./components/FriendPage/FriendPage";
 
 import Auth from "./hoc/auth";
 import KakaoAuth from "./controller/KakaoAuth";
@@ -30,6 +31,7 @@ function App() {
   const KakaoAuthPage = Auth(KakaoAuth, false);
   const AuthAlbumPage = Auth(AlbumPage, true);
   const AuthEditPhotoPage = Auth(Editor, null);
+  const AuthFriendPage = Auth(FriendPage, true);
 
   useEffect(() => {
     ReactGA.pageview(window.location.pathname + window.location.search);
@@ -47,6 +49,7 @@ function App() {
           <Route exact path="/album" element={<AuthAlbumPage />} />
           <Route exact path="/editPhoto" element={<AuthEditPhotoPage />} />
           <Route exact path="/group/:roomname" element={<GroupPage />} />
+          <Route exact path="/friend/:email" element={<AuthFriendPage />} />
           <Route
             exact
             path="/oauth/kakao/callback"
