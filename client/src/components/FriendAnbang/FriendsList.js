@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-import SearchFriend from "../SearchFriend/SearchFriend";
 import Header from "../Header/Header";
 import { auth } from "../../_actions/user_action";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import enterRoomP from "../../img/enterRoomP.png";
 import { useNavigate } from "react-router-dom";
+import SearchFriend from "../SearchFriend/SearchFriend";
 
 import { Avatar, Card } from "antd";
 
@@ -36,19 +36,23 @@ function FriendsList() {
       <div>{loading ? <Loading /> : null}</div>
       <Header />
       <SearchFriend />
-      <div style={{ marginTop: 50 }}>
+      <div className="searchFriendBox" style={{ marginTop: 50 }}>
         {friendsInfo.map((item, index) => (
           <div key={index} style={{ marginBottom: 20 }}>
             <Card
               onClick={() => {
                 navigate("/friendAnbang", {
-                  state: { targetId: item.email, targetName: item.name },
+                  state: {
+                    targetId: item.email,
+                    targetName: item.name,
+                    targetImage: item.profileImage,
+                  },
                 });
               }}
               style={{
                 maxWidth: "550px",
                 margin: "auto",
-                border: "2.5px solid #fc8da1",
+                // border: "2.5px solid #fc8da1",
               }}
               hoverable
             >

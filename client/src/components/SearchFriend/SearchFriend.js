@@ -67,6 +67,7 @@ function SearchFriend() {
             placeholder="이메일을 입력하세요"
             enterButton
             onPressEnter={clickedHandler}
+            onSearch={clickedHandler}
           />
         </div>
 

@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import Header from "../Header/Header";
+import FriendHeader from "./FriendHeader";
 import axios from "axios";
 import { auth } from "../../_actions/user_action";
 import Loading from "../Loading/Loading";
 import styles from "../AllAlbum/AllAlbum.module.css";
 import Modal from "../AllAlbum/Modal";
 import { useLocation } from "react-router-dom";
+import "./Friend.css";
 
 const url = process.env.REACT_APP_CLOUD_FRONT_URL;
 
@@ -19,8 +20,8 @@ function FriendAnbang() {
   const location = useLocation();
   const friendId = location.state.targetId;
   const friendName = location.state.targetName;
+  const friendImage = location.state.targetImage;
   let roomName = "";
-
 
   useEffect(() => {
     dispatch(auth()).then((res) => {
@@ -37,7 +38,6 @@ function FriendAnbang() {
   }, [dispatch]);
 
   let data = { datas: [] };
-  roomName = friendName + "님의 앨범";
 
   images.map((item) => {
     data.datas.push({
@@ -64,7 +64,19 @@ function FriendAnbang() {
     <>
       <div className="outer_container">
         <div>{loading ? <Loading /> : null}</div>
-        <Header subTitle={roomName} onBackUrl="/friendlist" />
+        <FriendHeader title={friendName} onBackUrl="/friendList"></FriendHeader>
+        <div
+          className="profileBox"
+          style={{
+            backgroundColor: "white",
+            height: "25%",
+            border: "none",
+          }}
+        >
+          <div className="profileImageBox">
+            <img className="profileImage" src={friendImage} alt="" />
+          </div>
+        </div>
 
         <div className={styles.contents_container}>
           <div className={styles.album_container}>
