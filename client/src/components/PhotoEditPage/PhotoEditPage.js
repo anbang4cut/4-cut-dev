@@ -231,8 +231,10 @@ function PhotoEditPage() {
     let now = new Date();
     const save_date_time = `${now.getFullYear()}${now.getMonth()}${now.getDate()}_${now.getHours()}${now.getMinutes()}`;
     const canvas = document.getElementById("canvas");
-    const dataUrl = canvas.toDataURL();
-    const filename = "4cut_" + save_date_time + ".png";
+    const dataUrl = isGifMode
+      ? document.getElementById("result-image").src
+      : canvas.toDataURL();
+    const filename = "4cut_" + save_date_time + (isGifMode ? ".gif" : ".png");
     let link = document.createElement("a");
     if (typeof link.download === "string") {
       link.href = dataUrl;
@@ -286,6 +288,10 @@ function PhotoEditPage() {
               style={{
                 justifyContent: "center",
                 display: "flex",
+              }}
+              onClick={(e) => {
+                e.preventDefault();
+                OnLocalSave();
               }}
             >
               <div className={styles.canvas_container}>
